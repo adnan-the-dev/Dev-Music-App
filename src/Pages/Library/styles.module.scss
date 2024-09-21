@@ -1,0 +1,39 @@
+.container {
+  padding: 0 2rem;
+
+  h1 {
+    font-size: 2.4rem;
+    text-transform: capitalize;
+  }
+
+  .playlists_container {
+    display: flex;
+    flex-wrap: wrap;
+
+    .liked_songs {
+      width: 35rem;
+      height: 30rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      margin-left: 0;
+      // background: linear-gradient(149.46deg, #450af5, #8e8ee5 99.16%);
+      background: rgb(16,140,166);
+      background: linear-gradient(0deg, rgba(16,140,166,1) 10%, rgba(45,45,171,1) 48%, rgba(37,159,184,1) 100%); 
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      h1 {
+        font-size: 4rem;
+        margin: 0 1rem;
+      }
+
+      p {
+        font-size: 1.4rem;
+        font-weight: 500;
+        margin: 1rem 1rem 2rem 1rem;
+      }
+    }
+  }
+}
