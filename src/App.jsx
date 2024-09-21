@@ -13,7 +13,7 @@ import SignUp from "./Pages/SignUp";
 import Login from "./Pages/Login";
 import NotFound from "./Pages/NotFound";
 // import PrivateRoute from "./PrivateRoute"
-import { Navigate, Route, Routes, useLocation } from "react -router-dom";
+// import { Navigate, Route, Routes, useLocation } from "react -router-dom";
 function App() {
   const user = true;
   // const [user, setUser] = useState(false);
@@ -32,7 +32,7 @@ function App() {
       <>
         {/* <Navbar /> */}
         {/* <Sidebar /> */}
-        {/* <AudioPlayer /> */}
+        <AudioPlayer />
         {/* <Main /> */}
         {/* <Home /> */}
         {/* <LikedSongs /> */}
@@ -40,7 +40,7 @@ function App() {
         {/* <Search/> */}
         {/* <Playlist /> */}
         {/* <Profile /> */}
-        <SignUp />
+        {/* <SignUp /> */}
         {/* <Login /> */}
         {/* <NotFound /> */}
       </>

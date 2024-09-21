@@ -80,6 +80,11 @@
           height: 2.5rem;
         }
       }
+      .prev:hover,
+      .next:hover {
+        // color: var(--hover-color);
+        color: whitesmoke;
+      }
     }
 
     .progress_container {
