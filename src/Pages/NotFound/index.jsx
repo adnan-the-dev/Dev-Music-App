@@ -1,21 +1,23 @@
 import record from "../../images/record.svg";
 import recordArm from "../../images/record-arm.svg";
 import styles from "./styles.module.scss";
+import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
-  // const history = useHistory();
+  const navigate = useNavigate();
+  const handleChangeRoute = () => {
+    navigate("/home");
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.left}>
         <div className={styles.main}>
-          <h1>404s and heartbreaks</h1>
+          <h1>Page Not Found</h1>
           <p>
-            We couldnot find the page you were looking for. Maybe our FAQ or
-            Community can help?
+            Oops! It looks like the page you are searching for does not exist.
           </p>
-          {/* <span onClick={() => history.push("/home")}>Go Back Home</span> */}
-          <span>Go Back Home</span>
+          <span onClick={handleChangeRoute}>Go Back Home</span>
         </div>
       </div>
       <div className={styles.right}>

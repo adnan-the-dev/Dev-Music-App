@@ -15,11 +15,11 @@ const Song = ({ song, playlist }) => {
         <IconButton className={styles.play_btn}>
           <PlayArrowIcon />
         </IconButton>
-        <img src={song.img} alt="song_img" />
-        <p>{song.name}</p>
+        <img src={song?.image} alt="song_img" />
+        <p>{song?.name}</p>
       </div>
       <div className={styles.center}>
-        <p>{song.artist}</p>
+        <p>{song?.artist}</p>
       </div>
       <div className={styles.right}>
         <Like songId={song._id} />

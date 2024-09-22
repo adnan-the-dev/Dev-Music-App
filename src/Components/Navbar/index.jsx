@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ClickAwayListener } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -10,20 +10,32 @@ import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import styles from "./styles.module.scss";
-
+import { jwtDecode } from "jwt-decode";
 const Navbar = () => {
+  const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
-  // const history = useHistory();
+  const [decodedToken, setDecodedToken] = useState(null);
+
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      const decoded = jwtDecode(storedToken);
+      setDecodedToken(decoded);
+    }
+  }, []);
 
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        {/* <div className={styles.icon} onClick={() => history.goBack()}> */}
-        <div className={styles.icon}>
+        <div className={styles.icon} onClick={() => navigate(-1)}>
           <ArrowBackIosRoundedIcon />
         </div>
-        {/* <div className={styles.icon} onClick={() => history.goForward()}> */}
-        <div className={styles.icon}>
+        <div className={styles.icon} onClick={() => navigate(-1)}>
           <ArrowForwardIosRoundedIcon />
         </div>
       </div>
@@ -34,7 +46,7 @@ const Navbar = () => {
           onClick={() => setMenu(!menu)}
         >
           <AccountCircleIcon />
-          <p>Adnan aziz</p>
+          <p>{decodedToken?.name || "Not loging"}</p>
           {menu ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
         </div>
       </div>
@@ -51,7 +63,7 @@ const Navbar = () => {
               <p>Settings</p>
               <SettingsIcon />
             </div>
-            <div className={styles.options}>
+            <div className={styles.options} onClick={handleLogOut}>
               <p>Logout</p>
               <LogoutIcon />
             </div>

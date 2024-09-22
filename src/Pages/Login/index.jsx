@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Joi from "joi";
 import TextField from "../../Components/Inputs/TextFeilds";
 import Checkbox from "../../Components/Inputs/CheckBox";
@@ -10,11 +10,13 @@ import GoogleIcon from "@mui/icons-material/Google";
 // import logo from "../../images/black_logo.svg";
 import logo from "../../assets/logo.png";
 import styles from "./styles.module.scss";
+import { postLoginApi } from "../../api/auth/authApi";
+import showToast from "../../utils/toastService";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate();
   const handleInputState = (name, value) => {
     setData({ ...data, [name]: value });
   };
@@ -33,15 +35,32 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (Object.keys(errors).length === 0) {
-      console.log(data);
-    } else {
-      console.log("please fill out properly");
+      const formData = {
+        email: data.email,
+        password: data.password,
+      };
+      try {
+        const res = await postLoginApi(formData);
+        console.log(res, "login response");
+        if (res.status == 200) {
+          showToast(`${res?.data?.message}`, "success");
+          navigate("/home");
+          // save the token in local storage
+          localStorage.setItem("token", res?.data?.data);
+        } else {
+          showToast(`${res?.response?.data?.message}`, "error");
+        }
+      } catch (error) {
+        showToast(
+          "An error occurred while registering user. Please try again.",
+          "error"
+        );
+      }
     }
   };
 
   return (
     <div className={styles.container}>
-  
       <main className={styles.main}>
         <div className={styles.logo}>
           <img className={styles.img} src={logo} alt="logo" />

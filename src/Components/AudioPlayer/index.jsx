@@ -1,48 +1,48 @@
 import Like from "../Like";
 import { IconButton } from "@mui/material";
-// import peaches from "../../images/peaches.jpg";
-// import peaches from "../../images/peaches.jpg";
 import logo from "../../assets/logo.png";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import CachedIcon from "@mui/icons-material/Cached";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import RepeatOneIcon from "@mui/icons-material/RepeatOne";
 import styles from "./styles.module.scss";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { getSongsApi } from "../../api/songs/songsApi";
+import showToast from "../../utils/toastService";
+import { getRandomNumber } from "../Shared/shared";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [repeat, setRepeat] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(240);
-  const [volume, setVolume] = useState(1); // Set to 240 seconds (4 minutes)
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [currentSongIndex, setCurrentSongIndex] = useState("");
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const envUrl = import.meta.env.VITE_REACT_SONG_URL;
+
   const currentSong = songs[currentSongIndex];
-  // const envUrl = import.meta.env.VITE_REACT_SONG_URL;
-  const envUrl = "http://localhost:3300";
-  console.log(`${envUrl}/${currentSong?.filePath}`, "currentSong");
-  // console.log(envUrl, "envUrl");
 
-  useEffect(() => {
-    const fetchSongs = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3300/api/songs/song"
-        );
-        setSongs(response?.data?.data);
-      } catch (error) {
-        console.error("Error fetching songs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSongs();
-  }, []);
+  const getAllApiSongs = async () => {
+    try {
+      const response = await getSongsApi();
+      setSongs(response?.data?.data);
+      const number = getRandomNumber(response?.data?.data?.length || 6);
+      setCurrentSongIndex(number);
+    } catch (error) {
+      showToast(`${response?.data?.message}`, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -57,6 +57,63 @@ const AudioPlayer = () => {
     setCurrentTime(audioRef.current.currentTime);
   };
 
+  const handleProgressChange = (e) => {
+    const newTime = e.target.value;
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value;
+    audioRef.current.volume = newVolume;
+    setVolume(newVolume);
+  };
+  const playNextSong = () => {
+    const nextIndex = (currentSongIndex + 1) % songs.length;
+    setCurrentSongIndex(nextIndex);
+    setCurrentTime(0);
+    setRepeat(false);
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      audioElement.src = songs[nextIndex].filePath;
+      audioElement.load();
+      audioElement.oncanplay = () => {
+        audioElement
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((error) => console.error("Error playing audio:", error));
+      };
+    }
+  };
+
+  const playPrevSong = () => {
+    const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    setCurrentSongIndex(prevIndex);
+    setCurrentTime(0);
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      audioElement.src = songs[prevIndex].filePath;
+      audioElement.load();
+      audioElement.oncanplay = () => {
+        audioElement
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((error) => console.error("Error playing audio:", error));
+      };
+    }
+  };
+  const reapteSong = () => {
+    const audio = audioRef.current;
+    audio.currentTime = 0;
+    setCurrentTime(0);
+    setIsPlaying(true);
+    setRepeat(true);
+  };
+  const muteSong = () => {
+    const audio = audioRef.current;
+    audio.muted = !audio.muted;
+    setVolume(audio.muted ? 0 : 1);
+    setMuted(!muted);
+  };
   useEffect(() => {
     const audio = audioRef.current;
     audio.addEventListener("timeupdate", handleTimeUpdate);
@@ -69,37 +126,15 @@ const AudioPlayer = () => {
     };
   }, []);
 
-  const handleProgressChange = (e) => {
-    const newTime = e.target.value;
-    audioRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
-  };
-  const handleVolumeChange = (e) => {
-    const newVolume = e.target.value;
-    audioRef.current.volume = newVolume; // Set the audio element's volume
-    setVolume(newVolume); // Update volume state
-  };
-  const playNextSong = () => {
-    const nextIndex = (currentSongIndex + 1) % songs.length;
-    setCurrentSongIndex(nextIndex);
-    setCurrentTime(0);
-    audioRef.current.src = songs[nextIndex].filePath;
-    audioRef.current.play();
-    setIsPlaying(true);
-  };
-
-  const playPrevSong = () => {
-    const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-    setCurrentSongIndex(prevIndex);
-    setCurrentTime(0);
-    audioRef.current.src = songs[prevIndex].filePath;
-    audioRef.current.play();
-    setIsPlaying(true);
-  };
+  useEffect(() => {
+    getAllApiSongs();
+  }, []);
   return (
     <div className={styles.audio_player}>
       <div className={styles.left}>
-        <img src={logo} alt="song_img" />
+        <div className={styles.imageBox}>
+          <img src={currentSong?.image || logo} alt="song_img" />
+        </div>
         <div className={styles.song_info}>
           <p className={styles.song_name}>{currentSong?.name}</p>
           <p className={styles.song_artist}>{currentSong?.artist}</p>
@@ -107,6 +142,9 @@ const AudioPlayer = () => {
       </div>
       <div className={styles.center}>
         <div className={styles.audio_controls}>
+          <IconButton className={styles.mute} onClick={muteSong}>
+            {muted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+          </IconButton>
           <IconButton className={styles.prev} onClick={playPrevSong}>
             <SkipPreviousIcon />
           </IconButton>
@@ -115,6 +153,9 @@ const AudioPlayer = () => {
           </IconButton>
           <IconButton className={styles.next} onClick={playNextSong}>
             <SkipNextIcon />
+          </IconButton>
+          <IconButton className={styles.reapte} onClick={reapteSong}>
+            {repeat ? <RepeatOneIcon /> : <CachedIcon />}
           </IconButton>
         </div>
         <div className={styles.progress_container}>
@@ -128,25 +169,11 @@ const AudioPlayer = () => {
             onChange={handleProgressChange}
             className={styles.progress}
           />
-
-          <audio ref={audioRef} src="/audio/peache.mp3" />
-          {/* <audio ref={audioRef} src={`http://localhost:3300/${songs[currentSongIndex].filePath}`} /> */}
-
-          {/* <audio
+          <audio
             ref={audioRef}
-            // src={currentSong?.filePath}
-            // src={`http://localhost:3300/api/${currentSong.filePath}`}
-            // localhost:3300/public/temp/song.mp4
-            // http://localhost:3300
-            // src={
-            //   currentSong
-            //     ? `${envUrl}/public/temp/${currentSong.filePath}`
-            //     : undefined
-            // }
-            src={`${envUrl}/${currentSong?.filePath}`}
+            src={currentSong ? `${envUrl}/${currentSong?.filePath}` : undefined}
             onEnded={playNextSong}
-          ></audio> */}
-
+          />
           <p>{new Date(duration * 1000).toISOString().substring(14, 19)}</p>
           <input
             type="range"
@@ -155,7 +182,7 @@ const AudioPlayer = () => {
             max="1"
             value={volume}
             onChange={handleVolumeChange}
-            className={styles.volume} // Add a new class for volume styling
+            className={styles.volume}
           />
         </div>
       </div>

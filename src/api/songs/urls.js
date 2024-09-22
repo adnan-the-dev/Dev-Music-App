@@ -1,8 +1,7 @@
 import { baseUrl } from "../handleApi";
 
 const urls = {
-  signup: `${baseUrl}/users`,
-  login: `${baseUrl}/login`,
+  getSongs: `${baseUrl}/songs`,
 };
 
 export default urls;

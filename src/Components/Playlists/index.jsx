@@ -3,18 +3,11 @@ import { Link } from "react-router-dom";
 import styles from "./styles.module.scss";
 import logo from "../../assets/logo.png";
 
-const Playlists = () => {
-  // const Playlists = ({ playlists }) => {
-  const playlists = [
-    {
-      _id: 1,
-      name: "Today's Top Songs",
-      desc: "By Adnan aziz",
-    },
-  ];
+// const Playlists = () => {
+const Playlists = ({ filteredPlaylists }) => {
   return (
     <Fragment>
-      {playlists.map((playlist) => (
+      {filteredPlaylists?.map((playlist) => (
         <Link key={playlist._id} to={`/playlist/${playlist._id}`}>
           <div className={styles.playlist}>
             {playlist.img === "" ? (
@@ -24,7 +17,7 @@ const Playlists = () => {
                 style={{ background: "#919496" }}
               />
             ) : (
-              <img src={logo} alt={playlist.name} />
+              <img src={playlist.img} alt={playlist.name} />
             )}
             <p>{playlist.name}</p>
             <span>{playlist.desc}</span>

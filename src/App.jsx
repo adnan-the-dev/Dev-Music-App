@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Fragment, useEffect, useState } from "react";
 import Sidebar from "./Components/Sidebar";
 import AudioPlayer from "./Components/AudioPlayer";
 import Navbar from "./Components/Navbar";
@@ -12,27 +13,24 @@ import Profile from "./Pages/Profile";
 import SignUp from "./Pages/SignUp";
 import Login from "./Pages/Login";
 import NotFound from "./Pages/NotFound";
-// import PrivateRoute from "./PrivateRoute"
-// import { Navigate, Route, Routes, useLocation } from "react -router-dom";
+import PrivateRoute from "./PrivateRoute";
 function App() {
-  const user = true;
-  // const [user, setUser] = useState(false);
-  // const location = useLocation();
-  // // const navigate = useNavigate();
+  const [user, setUser] = useState("");
+  const location = useLocation();
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     setUser(true);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser(true);
+    }
+  }, []);
 
   return (
     <>
       <>
         {/* <Navbar /> */}
         {/* <Sidebar /> */}
-        <AudioPlayer />
+        {/* <AudioPlayer /> */}
         {/* <Main /> */}
         {/* <Home /> */}
         {/* <LikedSongs /> */}
@@ -80,35 +78,57 @@ function App() {
         </Routes>
       </Fragment> */}
 
-      {/* <Fragment>
-        <PrivateRoute exact user={user} path="/home" component={Home} />
-         <PrivateRoute
-            exact
-            user={user}
+      <Fragment>
+        {user &&
+          location.pathname !== "/login" &&
+          location.pathname !== "/" &&
+          location.pathname !== "/signup" &&
+          location.pathname !== "/not-found" && (
+            <Fragment>
+              <Navbar />
+              <Sidebar />
+              <AudioPlayer />
+            </Fragment>
+          )}
+
+        <Routes>
+          {/* <Route path="/" element={<Main />} /> */}
+          <Route
+            path="/home"
+            element={<PrivateRoute user={user} element={<Home />} />}
+          />
+          <Route
             path="/collection/tracks"
-            component={LikedSongs}
+            element={<PrivateRoute user={user} element={<LikedSongs />} />}
           />
-          <PrivateRoute
-            exact
-            user={user}
+          <Route
             path="/collection/playlists"
-            component={Library}
+            element={<PrivateRoute user={user} element={<Library />} />}
           />
-          <PrivateRoute exact user={user} path="/search" component={Search} />
-          <PrivateRoute
-            exact
-            user={user}
+          <Route
+            path="/search"
+            element={<PrivateRoute user={user} element={<Search />} />}
+          />
+          <Route
             path="/playlist/:id"
-            component={Playlist}
+            element={<PrivateRoute user={user} element={<Playlist />} />}
           />
-          <PrivateRoute exact user={user} path="/me" component={Profile} />
-          {user && <Redirect from="/signup" to="/home" />}
-          {user && <Redirect from="/login" to="/home" />}
-          <Route path="/signup" component={SignUp} />
-          <Route path="/login" component={Login} />
-          <Route path="/not-found" component={NotFound} />
-        <Redirect to="/not-found" /> 
-      </Fragment> */}
+          <Route
+            path="/me"
+            element={<PrivateRoute user={user} element={<Profile />} />}
+          />
+          {user && (
+            <Route path="/signup" element={<Navigate to="/home" replace />} />
+          )}
+          {user && (
+            <Route path="/login" element={<Navigate to="/home" replace />} />
+          )}
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/not-found" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/not-found" replace />} />
+        </Routes>
+      </Fragment>
     </>
   );
 }

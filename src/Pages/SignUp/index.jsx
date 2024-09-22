@@ -42,12 +42,6 @@ const SignUp = () => {
     setData((data) => ({ ...data, [name]: value }));
   };
 
-  // const handleErrorState = (name, value) => {
-  //   value === ""
-  //     ? delete errors[name]
-  //     : setErrors(() => ({ ...errors, [name]: value }));
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
@@ -59,19 +53,14 @@ const SignUp = () => {
       year: data.year,
       gender: data.gender,
     };
-    console.log(formData, "form data");
-
     try {
       const res = await postRegisterApi(formData);
-      console.log(res, "register response");
-
       if (res.status == 200) {
-        showToast("This is a success message!", "success");
+        showToast(`${res?.data?.message}`, "success");
       } else {
-        showToast("Please try again.", "error");
+        showToast(`${res?.response?.data?.message}`, "error");
       }
     } catch (error) {
-      console.log("Error registering user", error);
       showToast(
         "An error occurred while registering user. Please try again.",
         "error"

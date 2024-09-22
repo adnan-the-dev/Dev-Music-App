@@ -1,5 +1,4 @@
-import { handleAPI } from "../handleApi";
-import urls from "./authUrls";
+
 
 export const postRegisterApi = async (data) => {
   const body = data;
