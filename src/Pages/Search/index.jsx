@@ -49,8 +49,6 @@ const Search = () => {
     try {
       const { data: response } = await getSongsApi();
       const { data: res } = await getAllPlayListsSongsApi();
-      // const res = await axios.get("http://localhost:3300/api/playlists");
-      // console.log(playlistsResponse, "playlistsResponse");
       setSongs(response?.data ?? []);
       setPlaylists(res?.data ?? []);
     } catch (error) {
@@ -77,6 +75,19 @@ const Search = () => {
   useEffect(() => {
     getAllApiSongs();
   }, []);
+
+  const getMatchedSongs = (playlists, songs) => {
+    return playlists.map((playlist) => {
+      const matched = songs.filter((song) => playlist.songs.includes(song._id));
+      return {
+        ...playlist,
+        matchedSongs: matched,
+      };
+    });
+  };
+
+  const matchedPlaylists = getMatchedSongs(playlists, songs);
+  // console.log(matchedPlaylists);
 
   return (
     <div className={styles.container}>

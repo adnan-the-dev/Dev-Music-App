@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TextField from "../../Components/Inputs/TextFeilds";
 import Select from "../../Components/Inputs/Select";
 import Radio from "../../Components/Inputs/Radio";
@@ -27,6 +27,7 @@ const months = [
 const genders = ["male", "female", "non-binary"];
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -37,6 +38,7 @@ const SignUp = () => {
     gender: "",
   });
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputState = (name, value) => {
     setData((data) => ({ ...data, [name]: value }));
@@ -54,9 +56,12 @@ const SignUp = () => {
       gender: data.gender,
     };
     try {
+      setIsLoading(true);
       const res = await postRegisterApi(formData);
       if (res.status == 200) {
         showToast(`${res?.data?.message}`, "success");
+        setIsLoading(false);
+        navigate("/login");
       } else {
         showToast(`${res?.response?.data?.message}`, "error");
       }
@@ -65,6 +70,8 @@ const SignUp = () => {
         "An error occurred while registering user. Please try again.",
         "error"
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -159,7 +166,7 @@ const SignUp = () => {
             />
           </div>
           <div className={styles.submit_btn_wrapper}>
-            <Button label="Sign Up" type="submit" />
+            <Button label="Sign Up" isLoading={isLoading} type="submit" />
           </div>
           <p className={styles.terms_condition} style={{ fontSize: "1.6rem" }}>
             Have an account? <Link to="/login"> Log in.</Link>

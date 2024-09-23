@@ -10,22 +10,22 @@ import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import styles from "./styles.module.scss";
-import { jwtDecode } from "jwt-decode";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
-  const [decodedToken, setDecodedToken] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      const decoded = jwtDecode(storedToken);
-      setDecodedToken(decoded);
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUserInfo(JSON.parse(user));
     }
   }, []);
 
@@ -46,7 +46,8 @@ const Navbar = () => {
           onClick={() => setMenu(!menu)}
         >
           <AccountCircleIcon />
-          <p>{decodedToken?.name || "Not loging"}</p>
+          <p>{userInfo?.name || "Not loging"}</p>
+          {/* <p>Not loging</p> */}
           {menu ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
         </div>
       </div>

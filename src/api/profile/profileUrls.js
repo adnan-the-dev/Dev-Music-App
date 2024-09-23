@@ -1,8 +1,9 @@
 import { baseUrl } from "../handleApi";
 
 const urls = {
-  signup: `${baseUrl}/users`,
-  login: `${baseUrl}/login`,
+  update: `${baseUrl}/users`,
 };
 
 export default urls;
+
+// http://localhost:3300/api/users/:id

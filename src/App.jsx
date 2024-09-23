@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import Sidebar from "./Components/Sidebar";
@@ -13,13 +15,16 @@ import Profile from "./Pages/Profile";
 import SignUp from "./Pages/SignUp";
 import Login from "./Pages/Login";
 import NotFound from "./Pages/NotFound";
+
+import RoutesPage from "./Components/Routes/RoutesPage";
+
 import PrivateRoute from "./PrivateRoute";
 function App() {
   const [user, setUser] = useState("");
   const location = useLocation();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
     if (token) {
       setUser(true);
     }
@@ -28,6 +33,7 @@ function App() {
   return (
     <>
       <>
+        {/* <RoutesPage /> */}
         {/* <Navbar /> */}
         {/* <Sidebar /> */}
         {/* <AudioPlayer /> */}
@@ -43,41 +49,6 @@ function App() {
         {/* <NotFound /> */}
       </>
 
-      {/* <Fragment>
-        {user &&
-          location.pathname !== "/login" &&
-          location.pathname !== "/" &&
-          location.pathname !== "/signup" &&
-          location.pathname !== "/not-found" && (
-            <Fragment>
-              <Navbar />
-              <Sidebar />
-              <AudioPlayer />
-            </Fragment>
-          )}
-        <Routes>
-          <Route path="/" element={<Main />} />
-          {user ? (
-            <>
-              <Route path="/home" element={<Home />} />
-              <Route path="/collection/tracks" element={<LikedSongs />} />
-              <Route path="/collection/playlists" element={<Library />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/playlist/:id" element={<Playlist />} />
-              <Route path="/me" element={<Profile />} />
-              <Route path="/songs" element={<CreateSong />} />
-            </>
-          ) : (
-            <>
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<Navigate to="/not-found" />} />
-            </>
-          )}
-          <Route path="/not-found" element={<NotFound />} />
-        </Routes>
-      </Fragment> */}
-
       <Fragment>
         {user &&
           location.pathname !== "/login" &&
@@ -92,7 +63,7 @@ function App() {
           )}
 
         <Routes>
-          {/* <Route path="/" element={<Main />} /> */}
+          <Route path="/" element={<Main />} />
           <Route
             path="/home"
             element={<PrivateRoute user={user} element={<Home />} />}

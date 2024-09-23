@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import defaultImg from "../../images/music.png";
 import styles from "./styles.module.scss";
 
-const PlaylistModel = ({ closeModel, playlist }) => {
+const PlaylistModel = ({ closeModel, playlistById }) => {
   const [data, setData] = useState({
     name: "",
     desc: "",
@@ -15,8 +15,12 @@ const PlaylistModel = ({ closeModel, playlist }) => {
   });
 
   useEffect(() => {
-    setData({ name: playlist.name, desc: playlist.desc, img: playlist.img });
-  }, [playlist]);
+    setData({
+      name: playlistById.name,
+      desc: playlistById.desc,
+      img: playlistById.img,
+    });
+  }, [playlistById]);
 
   const handleInputState = (name, value) => {
     setData((prev) => ({ ...prev, [name]: value }));

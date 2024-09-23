@@ -1,5 +1,4 @@
-import { useState, Fragment } from "react";
-import Song from "../../Components/Playlists";
+import { useState, Fragment, useEffect } from "react";
 import PlaylistModel from "../../Components/PlaylistModel";
 import { IconButton } from "@mui/material";
 import playlistImg from "../../images/rock.jpg";
@@ -9,6 +8,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styles from "./styles.module.scss";
 import logo from "../../assets/logo.png";
+import { useParams } from "react-router-dom";
+import { getAllPlayListsSongsApi } from "../../api/playLists/playLists";
+import Song from "../../Components/Song";
 
 const playlist = {
   _id: 1,
@@ -19,29 +21,56 @@ const playlist = {
 
 const songs = [
   { _id: 1, img: peaches, name: "Peaches", artist: "Justin Bieber" },
+  { _id: 1, img: peaches, name: "Peaches", artist: "Justin Bieber" },
 ];
 
 const Playlist = () => {
+  const [playlists, setPlaylists] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [model, setModel] = useState(false);
+  const { id } = useParams();
 
+  // find the playlist by id
+  const playlistById = playlists.find((p) => p?._id === id);
+
+  console.log(playlistById, "playlistById");
+
+  // fetch all songs for the playlist
+  const getAllApiSongs = async () => {
+    setLoading(true);
+    try {
+      const { data: res } = await getAllPlayListsSongsApi();
+      setPlaylists(res?.data ?? []);
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch songs.";
+      showToast(errorMessage, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAllApiSongs();
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.head}>
         <div className={styles.head_gradient}></div>
-        {playlist.img === "" ? (
+        {playlistById.img === "" ? (
           <img
             src="https://static.thenounproject.com/png/17849-200.png"
-            alt={playlist.name}
+            alt={playlistById.name}
             style={{ background: "#919496" }}
           />
         ) : (
-          <img src={playlist.img} alt={playlist.name} />
+          <img src={playlistById.img} alt={playlistById.name} />
         )}
 
         <div className={styles.playlist_info}>
           <p>Playlist</p>
-          <h1>{playlist.name}</h1>
-          <span>{playlist.desc}</span>
+          <h1>{playlistById.name}</h1>
+          <span>{playlistById.desc}</span>
         </div>
 
         <div className={styles.actions_container}>
@@ -73,7 +102,7 @@ const Playlist = () => {
         ))}
       </div>
       {model && (
-        <PlaylistModel closeModel={() => setModel(false)} playlist={playlist} />
+        <PlaylistModel closeModel={() => setModel(false)} playlistById={playlistById} />
       )}
     </div>
   );

@@ -1,13 +1,10 @@
+import { handleAPI } from "../handleApi";
+import urls from "./profileUrls";
 
-
-export const postRegisterApi = async (data) => {
+export const updateProfileApi = async (id, data) => {
   const body = data;
-  const response = await handleAPI(`${urls.signup}`, "POST", body);
+  const response = await handleAPI(`${urls.update}/${id}`, "PUT", body);
   return response;
 };
 
-export const postLoginApi = async (data) => {
-  const body = data;
-  const response = await handleAPI(`${urls.login}`, "POST", body);
-  return response;
-};
+// http://localhost:3300/api/users/:id

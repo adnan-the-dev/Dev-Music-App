@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Joi from "joi";
 import TextField from "../../Components/Inputs/TextFeilds";
 import Select from "../../Components/Inputs/Select";
 import Radio from "../../Components/Inputs/Radio";
 import Button from "../../Components/Button";
 import styles from "./styles.module.scss";
+import { jwtDecode } from "jwt-decode";
+import showToast from "../../utils/toastService";
+import { updateProfileApi } from "../../api/profile/profileApi";
 
 const months = [
   { name: "January", value: "01" },
@@ -33,7 +36,9 @@ const Profile = () => {
     gender: "",
   });
   const [errors, setErrors] = useState({});
-  const [isFetching, setIsFetching] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [decodedToken, setDecodedToken] = useState(null);
+
   const handleInputState = (name, value) => {
     setData((data) => ({ ...data, [name]: value }));
   };
@@ -48,10 +53,56 @@ const Profile = () => {
     name: Joi.string().min(5).max(10).required().label("Name"),
   };
 
-  const handleSubmit = (e) => {
+  const user = localStorage.getItem("user");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
+    try {
+      setIsLoading(true);
+      const formData = {
+        email: data.email,
+        name: data.name,
+        month: data.month,
+        year: data.year,
+        date: data.date,
+        gender: data.gender,
+      };
+      const response = await updateProfileApi(decodedToken._id, formData);
+      localStorage.setItem("user", JSON.stringify(response?.data?.user));
+      showToast(`${response?.data?.data?.massage}`, "success");
+      setIsLoading(false);
+    } catch (error) {
+      showToast("Failed to update profile.", "error");
+    } finally {
+      setIsLoading(false);
+    }
   };
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      const decoded = jwtDecode(storedToken);
+      setDecodedToken(decoded);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      try {
+        const parsedUser = JSON.parse(user);
+        setData((data) => ({
+          ...data,
+          email: parsedUser.email,
+          name: parsedUser.name,
+          month: parsedUser.month,
+          year: parsedUser.year,
+          date: parsedUser.date,
+          gender: parsedUser.gender,
+        }));
+      } catch (error) {
+        console.error("Error parsing user JSON:", error);
+      }
+    }
+  }, [user]);
 
   return (
     <div className={styles.container}>
@@ -60,7 +111,7 @@ const Profile = () => {
         <form onSubmit={handleSubmit} className={styles.form_container}>
           <div className={styles.input_container}>
             <TextField
-              label="What's your email?"
+              label="Email?"
               placeholder="Enter your email"
               name="email"
               handleInputState={handleInputState}
@@ -70,7 +121,7 @@ const Profile = () => {
           </div>
           <div className={styles.input_container}>
             <TextField
-              label="What should we call you?"
+              label="Name?"
               placeholder="Enter a profile name"
               name="name"
               handleInputState={handleInputState}
@@ -128,7 +179,7 @@ const Profile = () => {
             />
           </div>
           <div className={styles.submit_btn_wrapper}>
-            <Button label="Update" isFetching={isFetching} type="submit" />
+            <Button label="Update" isLoading={isLoading} type="submit" />
           </div>
         </form>
       </div>

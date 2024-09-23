@@ -16,6 +16,8 @@ import showToast from "../../utils/toastService";
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const handleInputState = (name, value) => {
     setData({ ...data, [name]: value });
@@ -40,13 +42,14 @@ const Login = () => {
         password: data.password,
       };
       try {
+        setIsLoading(true);
         const res = await postLoginApi(formData);
-        console.log(res, "login response");
         if (res.status == 200) {
           showToast(`${res?.data?.message}`, "success");
+          setIsLoading(false);
+          localStorage.setItem("accessToken", res?.data?.data);
+          localStorage.setItem("user", JSON.stringify(res?.data?.user));
           navigate("/home");
-          // save the token in local storage
-          localStorage.setItem("token", res?.data?.data);
         } else {
           showToast(`${res?.response?.data?.message}`, "error");
         }
@@ -55,6 +58,8 @@ const Login = () => {
           "An error occurred while registering user. Please try again.",
           "error"
         );
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -106,6 +111,7 @@ const Login = () => {
             <Button
               type="submit"
               label="LOG IN"
+              isLoading={isLoading}
               style={{ color: "white", background: "#15883e", width: "20rem" }}
             />
           </div>
