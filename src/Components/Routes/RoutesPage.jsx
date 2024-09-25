@@ -14,6 +14,8 @@ import { useAuth } from "../../utils/useAuth";
 import Navbar from "../../Components/Navbar";
 import Sidebar from "../../Components/Sidebar";
 import AudioPlayer from "../../Components/AudioPlayer";
+import CreatePlaylist from "../CreatePlaylist";
+import SidebarMui from "../SidebarMui";
 
 function RoutesPage() {
   return (
@@ -41,6 +43,7 @@ function RoutesPage() {
         <>
           <Navbar />
           <Sidebar />
+          {/* <SidebarMui /> */}
           <AudioPlayer />
           <div
             style={{
@@ -51,12 +54,14 @@ function RoutesPage() {
             }}
           >
             <Routes>
+              {/* <Route path="/sideBar" element={<Sidebar />} /> */}
               <Route path="/home" element={<Home />} />
               <Route path="/collection/tracks" element={<LikedSongs />} />
               <Route path="/collection/playlists" element={<Library />} />
               <Route path="/search" element={<Search />} />
               <Route path="/playlist/:id" element={<Playlist />} />
               <Route path="/me" element={<Profile />} />
+              <Route path="/add-playList" element={<CreatePlaylist />} />
               <Route path="/not-found" element={<NotFound />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>

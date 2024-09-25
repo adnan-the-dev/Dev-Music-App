@@ -39,10 +39,10 @@ const Sidebar = () => {
         <LibraryMusicIcon />
         <span>Your Library</span>
       </NavLink>
-      <div className={styles.create_playlist_btn}>
+      <NavLink to="/add-playList" className={styles.create_playlist_btn}>
         <AddIcon />
         <span>Create Playlist</span>
-      </div>
+      </NavLink>
       <NavLink
         to="/collection/tracks"
         className={styles.menu_link}

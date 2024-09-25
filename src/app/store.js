@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../features/auth/authSlice";
+import songSlice from "../features/songTodo/songSlice";
 
 export const store = configureStore({
-  reducer: authReducer,
+  reducer: songSlice,
 });
