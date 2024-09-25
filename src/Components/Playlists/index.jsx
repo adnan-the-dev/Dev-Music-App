@@ -5,6 +5,8 @@ import logo from "../../assets/logo.png";
 
 // const Playlists = () => {
 const Playlists = ({ filteredPlaylists }) => {
+  const envUrl = import.meta.env.VITE_REACT_SONG_URL;
+
   return (
     <Fragment>
       {filteredPlaylists?.map((playlist) => (
@@ -17,7 +19,10 @@ const Playlists = ({ filteredPlaylists }) => {
                 style={{ background: "#919496" }}
               />
             ) : (
-              <img src={playlist.img} alt={playlist.name} />
+              <img
+                src={playlist ? `${envUrl}/${playlist.img}` : undefined}
+                alt={playlist.name}
+              />
             )}
             <p>{playlist.name}</p>
             <span>{playlist.desc}</span>

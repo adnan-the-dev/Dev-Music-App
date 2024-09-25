@@ -33,6 +33,8 @@ const Playlist = () => {
   const [model, setModel] = useState(false);
   const { id } = useParams();
 
+  const envUrl = import.meta.env.VITE_REACT_SONG_URL;
+
   // fetch all songs for the playlist
   const getPlayList = async () => {
     setLoading(true);
@@ -62,7 +64,10 @@ const Playlist = () => {
             style={{ background: "#919496" }}
           />
         ) : (
-          <img src={playlist.img} alt={playlist.name} />
+          <img
+            src={playlist ? `${envUrl}/${playlist.img}` : undefined}
+            alt={playlist.name}
+          />
         )}
 
         <div className={styles.playlist_info}>

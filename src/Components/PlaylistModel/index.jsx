@@ -16,6 +16,8 @@ const PlaylistModel = ({ closeModel, playlist, getPlayList }) => {
     img: "",
   });
 
+  const envUrl = import.meta.env.VITE_REACT_SONG_URL;
+
   const id = playlist?._id;
 
   useEffect(() => {
@@ -23,7 +25,8 @@ const PlaylistModel = ({ closeModel, playlist, getPlayList }) => {
       setData({
         name: playlist.name || "",
         desc: playlist.desc || "",
-        img: playlist.img || "",
+        // img: playlist.img || "",
+        img: `${envUrl}/${playlist.img}` || "",
       });
     }
   }, [playlist]);

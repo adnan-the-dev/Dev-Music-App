@@ -140,7 +140,7 @@ const AudioPlayer = () => {
     <div className={styles.audio_player}>
       <div className={styles.left}>
         <div className={styles.imageBox}>
-          <img src={currentSong?.image || logo} alt="song_img" />
+          <img src={`${envUrl}/${currentSong?.image}` || logo} alt="song_img" />
         </div>
         <div className={styles.song_info}>
           <p className={styles.song_name}>{currentSong?.name}</p>
