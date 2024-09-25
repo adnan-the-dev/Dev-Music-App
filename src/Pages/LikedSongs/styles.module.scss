@@ -42,7 +42,12 @@
   }
   .body {
     padding: 1rem 3rem;
-
+    .loader_box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
     .progress_container {
       display: flex;
       align-items: center;

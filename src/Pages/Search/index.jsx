@@ -76,19 +76,6 @@ const Search = () => {
     getAllApiSongs();
   }, []);
 
-  const getMatchedSongs = (playlists, songs) => {
-    return playlists.map((playlist) => {
-      const matched = songs.filter((song) => playlist.songs.includes(song._id));
-      return {
-        ...playlist,
-        matchedSongs: matched,
-      };
-    });
-  };
-
-  const matchedPlaylists = getMatchedSongs(playlists, songs);
-  // console.log(matchedPlaylists);
-
   return (
     <div className={styles.container}>
       <div className={styles.search_input_container}>

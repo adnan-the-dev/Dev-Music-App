@@ -1,9 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Song from "../../Components/Song";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import styles from "./styles.module.scss";
 import likeImg from "../../assets/logo.png";
 import peaches from "../../assets/logo.png";
+import { getAllLikedSongsApi } from "../../api/songs/songsApi";
+import { CircularProgress } from "@mui/material";
 
 const songs = [
   { _id: 1, img: peaches, name: "Peaches", artist: "Justin Bieber" },
@@ -13,6 +15,31 @@ const songs = [
 ];
 
 const LikedSongs = () => {
+  // getAllLikedSongsApi
+
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getAllLikeSongs = async () => {
+    setLoading(true);
+    try {
+      setLoading(true);
+      const { data: response } = await getAllLikedSongsApi();
+      setSongs(response?.data ?? []);
+      setLoading(false);
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to fetch songs.";
+      showToast(errorMessage, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAllLikeSongs();
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.head}>
@@ -37,12 +64,17 @@ const LikedSongs = () => {
             <AccessTimeIcon />
           </div>
         </div>
-
-        {songs.map((song) => (
-          <Fragment key={song._id}>
-            <Song song={song} />
-          </Fragment>
-        ))}
+        {loading ? (
+          <div className={styles.loader_box}>
+            <CircularProgress style={{ color: "white" }} />
+          </div>
+        ) : (
+          songs?.map((song) => (
+            <Fragment key={song._id}>
+              <Song song={song} />
+            </Fragment>
+          ))
+        )}
       </div>
     </div>
   );

@@ -42,16 +42,25 @@ function RoutesPage() {
           <Navbar />
           <Sidebar />
           <AudioPlayer />
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/collection/tracks" element={<LikedSongs />} />
-            <Route path="/collection/playlists" element={<Library />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/playlist/:id" element={<Playlist />} />
-            <Route path="/me" element={<Profile />} />
-            {/* <Route path="/not-found" element={<NotFound />} />
-            <Route path="*" element={<Navigate to="/not-found" replace />} /> */}
-          </Routes>
+          <div
+            style={{
+              padding: "6rem 0 0 26rem",
+              backgroundColor: "#181818",
+              color: "#ffffff",
+              minHeight: "calc(100vh - 6rem)",
+            }}
+          >
+            <Routes>
+              <Route path="/home" element={<Home />} />
+              <Route path="/collection/tracks" element={<LikedSongs />} />
+              <Route path="/collection/playlists" element={<Library />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/playlist/:id" element={<Playlist />} />
+              <Route path="/me" element={<Profile />} />
+              <Route path="/not-found" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/not-found" replace />} />
+            </Routes>
+          </div>
         </>
       ) : (
         <>
@@ -59,6 +68,7 @@ function RoutesPage() {
             <Route path="/" element={<Main />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Login />} />
           </Routes>
         </>
       )}

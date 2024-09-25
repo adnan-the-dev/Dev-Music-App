@@ -4,32 +4,51 @@ import FileInput from "../Inputs/FileInput";
 import Button from "../Button";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import defaultImg from "../../images/music.png";
+import defaultImg from "../../assets/logo.png";
 import styles from "./styles.module.scss";
+import showToast from "../../utils/toastService";
+import { updatePlaylistById } from "../../api/playLists/playLists";
 
-const PlaylistModel = ({ closeModel, playlistById }) => {
+const PlaylistModel = ({ closeModel, playlist, getPlayList }) => {
   const [data, setData] = useState({
     name: "",
     desc: "",
     img: "",
   });
 
+  const id = playlist?._id;
+
   useEffect(() => {
-    setData({
-      name: playlistById.name,
-      desc: playlistById.desc,
-      img: playlistById.img,
-    });
-  }, [playlistById]);
+    if (playlist) {
+      setData({
+        name: playlist.name || "",
+        desc: playlist.desc || "",
+        img: playlist.img || "",
+      });
+    }
+  }, [playlist]);
 
   const handleInputState = (name, value) => {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
-    closeModel();
+
+    try {
+      const formData = {
+        name: data.name,
+        desc: data.desc,
+        img: typeof data.img === "string" ? data.img : "",
+      };
+      const response = await updatePlaylistById(id, formData);
+      showToast(`${response?.data?.message}`, "success");
+      closeModel();
+      getPlayList();
+    } catch (error) {
+      console.error(error);
+      showToast("Failed to update playlist", "error");
+    }
   };
 
   return (

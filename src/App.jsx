@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       <>
-        {/* <RoutesPage /> */}
+        <RoutesPage />
         {/* <Navbar /> */}
         {/* <Sidebar /> */}
         {/* <AudioPlayer /> */}
@@ -49,7 +49,7 @@ function App() {
         {/* <NotFound /> */}
       </>
 
-      <Fragment>
+      {/* <Fragment>
         {user &&
           location.pathname !== "/login" &&
           location.pathname !== "/" &&
@@ -99,7 +99,7 @@ function App() {
           <Route path="/not-found" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Routes>
-      </Fragment>
+      </Fragment> */}
     </>
   );
 }

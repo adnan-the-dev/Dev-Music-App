@@ -23,13 +23,12 @@ const Song = ({ song, playlist }) => {
       </div>
       <div className={styles.right}>
         <Like songId={song._id} />
+        {/* <Like /> */}
         <p>4.30</p>
         <IconButton className={styles.menu_btn} onClick={() => setMenu(true)}>
           <MoreHorizIcon />
         </IconButton>
-        {menu && (
-          <PlaylistMenu playlist={playlist} closeMenu={() => setMenu(false)} />
-        )}
+        {menu && <PlaylistMenu song={song} closeMenu={() => setMenu(false)} />}
       </div>
     </div>
   );

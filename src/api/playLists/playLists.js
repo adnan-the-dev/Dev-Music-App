@@ -1,21 +1,30 @@
 import { handleAPI } from "../handleApi";
 import urls from "./playListUrls";
 
+// get all playlists
 export const getAllPlayListsSongsApi = async () => {
   const response = await handleAPI(`${urls.playLists}`, "GET");
   return response;
 };
 
-// export const getAllOutletMenuApi = async () => {
-//   const response = await handleAPICall(${urls.allOutletMenu}, "GET");
-//   return response;
-// };
+// get playlist by id
+export const getPlayListById = async (id) => {
+  const response = await handleAPI(`${urls.playListById}/${id}`, "GET");
+  return response;
+};
 
-// export const getOutletMenuApi = async (outletId) => {
-//   const response = await protectedAPICall(
-//     ${urls.outletMenu}/${outletId}/menu,
-//     "GET",
+// update playlist by id
+export const updatePlaylistById = async (id, data) => {
+  const body = data;
+  const response = await handleAPI(`${urls.updatePlayList}/${id}`, "PUT", body);
+  return response;
+};
 
-//   );
-//   return response;
-// };
+// add song to playlist by id
+export const addSongToPlaylist = async (data) => {
+  const body = data;
+  const response = await handleAPI(`${urls.addSongToPlaylist}`, "PUT", body);
+  return response;
+};
+
+// http://localhost:3300/api/playlists/add-song

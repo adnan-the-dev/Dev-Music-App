@@ -17,7 +17,7 @@ const Navbar = () => {
   const [userInfo, setUserInfo] = useState(null);
 
   const handleLogOut = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
     navigate("/login");
   };

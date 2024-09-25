@@ -2,7 +2,7 @@ import axios from "axios";
 export const baseUrl =
   import.meta.env.VITE_REACT_APP_BASE_URL || "http://localhost:3300";
 export const handleAPI = async (url, method, body = {}) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken");
 
   try {
     const headers = {

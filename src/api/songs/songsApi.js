@@ -6,16 +6,17 @@ export const getSongsApi = async () => {
   return response;
 };
 
-// export const getAllOutletMenuApi = async () => {
-//   const response = await handleAPICall(${urls.allOutletMenu}, "GET");
-//   return response;
-// };
 
-// export const getOutletMenuApi = async (outletId) => {
-//   const response = await protectedAPICall(
-//     ${urls.outletMenu}/${outletId}/menu,
-//     "GET",
+// likeSong API
+export const likeSongApi = async (id) => {
+  const response = await handleAPI(`${urls.likeSong}/${id}`, "PUT");
+  return response;
+};
 
-//   );
-//   return response;
-// };
+// get all liked songs API
+export const getAllLikedSongsApi = async () => {
+  const response = await handleAPI(`${urls.allLikeSongs}`, "GET");
+  return response;
+};
+
+// http://localhost:3300/api/songs/like

@@ -25,7 +25,7 @@ const AudioPlayer = () => {
   const [volume, setVolume] = useState(1);
   const [currentSongIndex, setCurrentSongIndex] = useState("");
   const [songs, setSongs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const envUrl = import.meta.env.VITE_REACT_SONG_URL;
 
@@ -33,10 +33,17 @@ const AudioPlayer = () => {
 
   const getAllApiSongs = async () => {
     try {
+      setLoading(true);
       const response = await getSongsApi();
-      setSongs(response?.data?.data);
-      const number = getRandomNumber(response?.data?.data?.length || 6);
+      const songsData = response?.data?.data || [];
+      if (songsData.length === 0) {
+        // throw new Error("No songs available.");
+        showToast("No songs available.", "error");
+      }
+      setSongs(songsData);
+      const number = getRandomNumber(songsData?.length || 6);
       setCurrentSongIndex(number);
+      setLoading(false);
     } catch (error) {
       showToast(`${response?.data?.message}`, "error");
     } finally {

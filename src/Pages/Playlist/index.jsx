@@ -9,7 +9,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import styles from "./styles.module.scss";
 import logo from "../../assets/logo.png";
 import { useParams } from "react-router-dom";
-import { getAllPlayListsSongsApi } from "../../api/playLists/playLists";
+import {
+  getAllPlayListsSongsApi,
+  getPlayListById,
+} from "../../api/playLists/playLists";
 import Song from "../../Components/Song";
 
 const playlist = {
@@ -25,22 +28,17 @@ const songs = [
 ];
 
 const Playlist = () => {
-  const [playlists, setPlaylists] = useState([]);
+  const [playlist, setPlaylist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [model, setModel] = useState(false);
   const { id } = useParams();
 
-  // find the playlist by id
-  const playlistById = playlists.find((p) => p?._id === id);
-
-  console.log(playlistById, "playlistById");
-
   // fetch all songs for the playlist
-  const getAllApiSongs = async () => {
+  const getPlayList = async () => {
     setLoading(true);
     try {
-      const { data: res } = await getAllPlayListsSongsApi();
-      setPlaylists(res?.data ?? []);
+      const { data: res } = await getPlayListById(id);
+      setPlaylist(res?.data ?? []);
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch songs.";
@@ -51,26 +49,26 @@ const Playlist = () => {
   };
 
   useEffect(() => {
-    getAllApiSongs();
+    getPlayList();
   }, []);
   return (
     <div className={styles.container}>
       <div className={styles.head}>
         <div className={styles.head_gradient}></div>
-        {playlistById.img === "" ? (
+        {playlist.img === "" ? (
           <img
             src="https://static.thenounproject.com/png/17849-200.png"
-            alt={playlistById.name}
+            alt={playlist.name}
             style={{ background: "#919496" }}
           />
         ) : (
-          <img src={playlistById.img} alt={playlistById.name} />
+          <img src={playlist.img} alt={playlist.name} />
         )}
 
         <div className={styles.playlist_info}>
           <p>Playlist</p>
-          <h1>{playlistById.name}</h1>
-          <span>{playlistById.desc}</span>
+          <h1>{playlist.name}</h1>
+          <span>{playlist.desc}</span>
         </div>
 
         <div className={styles.actions_container}>
@@ -95,14 +93,24 @@ const Playlist = () => {
             <AccessTimeIcon />
           </div>
         </div>
-        {songs.map((song) => (
+
+        {/* {songs.map((song) => (
+          <Fragment key={song._id}>
+            <Song playlist={playlist} />
+          </Fragment>
+        ))} */}
+        {playlist?.songs?.map((song) => (
           <Fragment key={song._id}>
             <Song song={song} playlist={playlist} />
           </Fragment>
         ))}
       </div>
       {model && (
-        <PlaylistModel closeModel={() => setModel(false)} playlistById={playlistById} />
+        <PlaylistModel
+          closeModel={() => setModel(false)}
+          playlist={playlist}
+          getPlayList={getPlayList}
+        />
       )}
     </div>
   );
