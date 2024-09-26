@@ -11,6 +11,9 @@ import { getSongsApi } from "../../api/songs/songsApi";
 import showToast from "../../utils/toastService";
 import { getAllPlayListsSongsApi } from "../../api/playLists/playLists";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setSongs } from "../../redux/slices/songsSlice";
+import { setPlaylists } from "../../redux/slices/playlistsSlice";
 
 const playlists = [
   { _id: 1, img: playlistImg, name: "Today's Top Songs", desc: "By Jahangeer" },
@@ -40,17 +43,22 @@ const songs = [
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [songs, setSongs] = useState([]);
-  const [playlists, setPlaylists] = useState([]);
+  // const [songs, setSongs] = useState([]);
+  // const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   const getAllApiSongs = async () => {
     setLoading(true);
     try {
       const { data: response } = await getSongsApi();
       const { data: res } = await getAllPlayListsSongsApi();
-      setSongs(response?.data ?? []);
-      setPlaylists(res?.data ?? []);
+      // setSongs(response?.data ?? []);
+      // setPlaylists(res?.data ?? []);
+
+      // Dispatch actions to the store
+      dispatch(setSongs(response?.data ?? []));
+      dispatch(setPlaylists(res?.data ?? []));
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "Failed to fetch songs.";
@@ -59,6 +67,10 @@ const Search = () => {
       setLoading(false);
     }
   };
+
+  const songs = useSelector((state) => state.songs.songs);
+  const playlists = useSelector((state) => state.playlists.playlists);
+
 
   const filteredSongs = searchTerm
     ? songs.filter((song) =>

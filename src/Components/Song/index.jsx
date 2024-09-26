@@ -5,19 +5,26 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./styles.module.scss";
 import PlaylistMenu from "../PlaylistMenu";
+import { useDispatch } from "react-redux";
+import { playSong } from "../../redux/slices/playingSlice";
 
 const Song = ({ song, playlist }) => {
+  const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
 
   const envUrl = import.meta.env.VITE_REACT_SONG_URL;
 
+  const handlePlay = () => {
+    dispatch(playSong(song)); 
+  };
+
   return (
     <div className={styles.song_container}>
       <div className={styles.left}>
-        <IconButton className={styles.play_btn}>
+        <IconButton className={styles.play_btn} onClick={handlePlay}>
           <PlayArrowIcon />
+          {/* {isPlaying ? <PauseIcon /> : <PlayArrowIcon />} */}
         </IconButton>
-        {/* <img src={song?.image} alt="song_img" /> */}
         <img
           src={song ? `${envUrl}/${song?.image}` : undefined}
           alt="song_img"

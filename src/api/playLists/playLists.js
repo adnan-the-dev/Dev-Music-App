@@ -1,4 +1,4 @@
-import { handleAPI } from "../handleApi";
+import { handleAPI, handleFileAPI } from "../handleApi";
 import urls from "./playListUrls";
 
 // get all playlists
@@ -16,7 +16,11 @@ export const getPlayListById = async (id) => {
 // update playlist by id
 export const updatePlaylistById = async (id, data) => {
   const body = data;
-  const response = await handleAPI(`${urls.updatePlayList}/${id}`, "PUT", body);
+  const response = await handleFileAPI(
+    `${urls.updatePlayList}/${id}`,
+    "PUT",
+    body
+  );
   return response;
 };
 
@@ -27,4 +31,17 @@ export const addSongToPlaylist = async (data) => {
   return response;
 };
 
-// http://localhost:3300/api/playlists/add-song
+// create new playlist
+export const createPlaylistApi = async (data) => {
+  const body = data;
+  const response = await handleFileAPI(
+    `${urls.createPlaylist}`,
+    "POST",
+    body
+  );
+  return response;
+};
+
+
+
+// http://localhost:3300/api/playlists

@@ -14,9 +14,12 @@ import { useEffect, useRef, useState } from "react";
 import { getSongsApi } from "../../api/songs/songsApi";
 import showToast from "../../utils/toastService";
 import { getRandomNumber } from "../Shared/shared";
+import { useDispatch, useSelector } from "react-redux";
+import { setSongs } from "../../redux/slices/songsSlice";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
+  const dispatch = useDispatch();
   const [isPlaying, setIsPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [repeat, setRepeat] = useState(false);
@@ -24,12 +27,16 @@ const AudioPlayer = () => {
   const [duration, setDuration] = useState(240);
   const [volume, setVolume] = useState(1);
   const [currentSongIndex, setCurrentSongIndex] = useState("");
-  const [songs, setSongs] = useState([]);
+  // const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const envUrl = import.meta.env.VITE_REACT_SONG_URL;
 
-  const currentSong = songs[currentSongIndex];
+  const useSelectorData = useSelector((state) => state.playing.currentSong);
+  
+  const songs = useSelector((state) => state.songs.songs);
+
+  // const currentSong = songs[currentSongIndex];
 
   const getAllApiSongs = async () => {
     try {
@@ -37,10 +44,10 @@ const AudioPlayer = () => {
       const response = await getSongsApi();
       const songsData = response?.data?.data || [];
       if (songsData.length === 0) {
-        // throw new Error("No songs available.");
         showToast("No songs available.", "error");
       }
-      setSongs(songsData);
+      // setSongs(songsData);
+      dispatch(setSongs(songsData));
       const number = getRandomNumber(songsData?.length || 6);
       setCurrentSongIndex(number);
       setLoading(false);
@@ -50,6 +57,20 @@ const AudioPlayer = () => {
       setLoading(false);
     }
   };
+  const currentSong = songs[currentSongIndex] || useSelectorData;
+
+  useEffect(() => {
+    if (useSelectorData) {
+      const songIndex = songs.findIndex(
+        (song) => song._id === useSelectorData._id
+      );
+      if (songIndex !== -1) {
+        setCurrentSongIndex(songIndex);
+      }
+    }
+  }, [useSelectorData, songs]);
+
+
 
   const togglePlay = () => {
     if (isPlaying) {

@@ -4,6 +4,8 @@ import styles from "./styles.module.scss";
 import playlistImg from "../../images/rock.jpg";
 import { getAllPlayListsSongsApi } from "../../api/playLists/playLists";
 import showToast from "../../utils/toastService";
+import { useDispatch, useSelector } from "react-redux";
+import { setPlaylists } from "../../redux/slices/playlistsSlice";
 
 const filteredPlaylists = [
   { _id: 1, img: playlistImg, name: "Today's Top Songs", desc: "By Jahangeer" },
@@ -17,11 +19,13 @@ const filteredPlaylists = [
 ];
 
 const Home = () => {
-  const [filteredPlaylists, setFilteredPlaylists] = useState([]);
+  const dispatch = useDispatch();
+  // const [filteredPlaylists, setFilteredPlaylists] = useState([]);
   const callPlayListsApi = async () => {
     try {
-      const { data: response } = await getAllPlayListsSongsApi();
-      setFilteredPlaylists(response?.data ?? []);
+      const { data: res } = await getAllPlayListsSongsApi();
+      // setFilteredPlaylists(response?.data ?? []);
+      dispatch(setPlaylists(res?.data ?? []));
     } catch (error) {
       showToast("Failed to fetch songs.", "error");
     }
@@ -29,6 +33,8 @@ const Home = () => {
   useEffect(() => {
     callPlayListsApi();
   }, []);
+  const filteredPlaylists = useSelector((state) => state.playlists.playlists);
+
   return (
     <Fragment>
       <div className={styles.container}>

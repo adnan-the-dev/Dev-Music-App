@@ -13,7 +13,7 @@ const PlaylistModel = ({ closeModel, playlist, getPlayList }) => {
   const [data, setData] = useState({
     name: "",
     desc: "",
-    img: "",
+    image: "",
   });
 
   const envUrl = import.meta.env.VITE_REACT_SONG_URL;
@@ -26,7 +26,7 @@ const PlaylistModel = ({ closeModel, playlist, getPlayList }) => {
         name: playlist.name || "",
         desc: playlist.desc || "",
         // img: playlist.img || "",
-        img: `${envUrl}/${playlist.img}` || "",
+        image: `${envUrl}/${playlist.img}` || "",
       });
     }
   }, [playlist]);
@@ -38,12 +38,12 @@ const PlaylistModel = ({ closeModel, playlist, getPlayList }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formData = {
+      name: data.name,
+      desc: data.desc,
+      image: data.image,
+    };
     try {
-      const formData = {
-        name: data.name,
-        desc: data.desc,
-        img: typeof data.img === "string" ? data.img : "",
-      };
       const response = await updatePlaylistById(id, formData);
       showToast(`${response?.data?.message}`, "success");
       closeModel();
@@ -81,8 +81,8 @@ const PlaylistModel = ({ closeModel, playlist, getPlayList }) => {
           <FileInput
             label="Choose Image"
             type="image"
-            name="img"
-            value={data.img === "" ? defaultImg : data.img}
+            name="image"
+            value={data.image === "" ? defaultImg : data.image}
             handleInputState={handleInputState}
           />
         </div>
