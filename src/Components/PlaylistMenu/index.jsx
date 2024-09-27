@@ -7,6 +7,7 @@ import {
   getAllPlayListsSongsApi,
 } from "../../api/playLists/playLists";
 import showToast from "../../utils/toastService";
+import { deleteSongApi } from "../../api/songs/songsApi";
 
 const playlists = [
   { _id: 1, img: "", name: "Today's Top Songs", desc: "By Jahangeer" },
@@ -50,6 +51,16 @@ const PlaylistMenu = ({ song, closeMenu }) => {
     getAllApiSongs();
   }, []);
 
+  // delte song api function
+  const deleteSongFuc = async (id) => {
+    try {
+      const { data: response } = await deleteSongApi(id);
+      showToast(`${response?.message}`, "success");
+    } catch (error) {
+      showToast("Failed to update playlist", "error");
+    }
+  };
+
   return (
     <ClickAwayListener onClickAway={closeMenu}>
       <div className={styles.menu} onClick={closeMenu}>
@@ -69,7 +80,7 @@ const PlaylistMenu = ({ song, closeMenu }) => {
           </Fragment>
         </div>
 
-        <div className={styles.option}>
+        <div className={styles.option} onClick={() => deleteSongFuc(song._id)}>
           <p>Delete</p>
         </div>
         <div className={styles.option}>

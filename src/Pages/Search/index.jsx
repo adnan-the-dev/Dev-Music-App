@@ -15,32 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSongs } from "../../redux/slices/songsSlice";
 import { setPlaylists } from "../../redux/slices/playlistsSlice";
 
-const playlists = [
-  { _id: 1, img: playlistImg, name: "Today's Top Songs", desc: "By Jahangeer" },
-  { _id: 2, img: playlistImg, name: "Today's Top Songs", desc: "By Jahangeer" },
-  { _id: 3, img: playlistImg, name: "Today's Top Songs", desc: "By Jahangeer" },
-];
-
-const songs = [
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-  { _id: 1, img: peaches, name: "Today's Top Songs", artist: "By Jahangeer" },
-];
-
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   // const [songs, setSongs] = useState([]);

@@ -47,7 +47,6 @@ const Navbar = () => {
         >
           <AccountCircleIcon />
           <p>{userInfo?.name || "Not loging"}</p>
-          {/* <p>Not loging</p> */}
           {menu ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
         </div>
       </div>

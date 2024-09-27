@@ -16,6 +16,7 @@ import Sidebar from "../../Components/Sidebar";
 import AudioPlayer from "../../Components/AudioPlayer";
 import CreatePlaylist from "../CreatePlaylist";
 import SidebarMui from "../SidebarMui";
+import MusicUploadForm from "../MusicUploadForm/MusicUploadForm";
 
 function RoutesPage() {
   return (
@@ -41,10 +42,10 @@ function RoutesPage() {
     <>
       {useAuth() ? (
         <>
-          <Navbar />
-          <Sidebar />
-          {/* <SidebarMui /> */}
-          <AudioPlayer />
+          {/* <Navbar /> */}
+          {/* <Sidebar /> */}
+          <SidebarMui />
+          {/* <AudioPlayer /> */}
           <div
             style={{
               padding: "6rem 0 0 26rem",
@@ -62,6 +63,7 @@ function RoutesPage() {
               <Route path="/playlist/:id" element={<Playlist />} />
               <Route path="/me" element={<Profile />} />
               <Route path="/add-playList" element={<CreatePlaylist />} />
+              <Route path="/add-song" element={<MusicUploadForm />} />
               <Route path="/not-found" element={<NotFound />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
