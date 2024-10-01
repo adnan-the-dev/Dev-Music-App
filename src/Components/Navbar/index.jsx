@@ -19,7 +19,7 @@ const Navbar = () => {
   const handleLogOut = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
-    navigate("/login");
+    navigate("/welcome");
   };
 
   useEffect(() => {
