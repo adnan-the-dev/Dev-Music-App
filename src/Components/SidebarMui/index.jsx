@@ -66,11 +66,11 @@ const menuItems = [
     icon: <FavoriteIcon />,
     label: "Liked Songs",
   },
-  {
-    to: "/wave-surfer",
-    icon: <FavoriteIcon />,
-    label: "Wave Surfer",
-  },
+  // {
+  //   to: "/wave-surfer",
+  //   icon: <FavoriteIcon />,
+  //   label: "Wave Surfer",
+  // },
 ];
 
 const playlists = [
@@ -130,31 +130,6 @@ const AppBar = styled(MuiAppBar, {
     },
   ],
 }));
-
-// const Drawer = styled(MuiDrawer, {
-//   shouldForwardProp: (prop) => prop !== "open",
-// })(({ theme }) => ({
-//   width: drawerWidth,
-//   flexShrink: 0,
-//   whiteSpace: "nowrap",
-//   boxSizing: "border-box",
-//   variants: [
-//     {
-//       props: ({ open }) => open,
-//       style: {
-//         ...openedMixin(theme),
-//         "& .MuiDrawer-paper": openedMixin(theme),
-//       },
-//     },
-//     {
-//       props: ({ open }) => !open,
-//       style: {
-//         ...closedMixin(theme),
-//         "& .MuiDrawer-paper": closedMixin(theme),
-//       },
-//     },
-//   ],
-// }));
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -351,7 +326,7 @@ export default function MiniDrawer() {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, padding: "5rem 5rem" }}>
         <Outlet />
       </Box>
       {/* bottom app bar */}
@@ -359,6 +334,9 @@ export default function MiniDrawer() {
         <Toolbar
           style={{
             backgroundColor: `var(--light-gray)`,
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center",
           }}
         >
           <PlayerBar />

@@ -45,7 +45,6 @@ const Search = () => {
   const songs = useSelector((state) => state.songs.songs);
   const playlists = useSelector((state) => state.playlists.playlists);
 
-
   const filteredSongs = searchTerm
     ? songs.filter((song) =>
         song.name.toLowerCase().includes(searchTerm.toLowerCase())

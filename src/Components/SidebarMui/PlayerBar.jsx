@@ -1,50 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import RepeatOneIcon from "@mui/icons-material/RepeatOne";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
 import logo from "../../assets/logo.png";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import CachedIcon from "@mui/icons-material/Cached";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
-import MailIcon from "@mui/icons-material/Mail";
 import PauseIcon from "@mui/icons-material/Pause";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import styles from "./styles.module.scss";
-import image from "../../assets/logo.png";
-import Like from "../Like";
-import HomeIcon from "@mui/icons-material/Home";
-import SearchIcon from "@mui/icons-material/Search";
-import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
-import AddIcon from "@mui/icons-material/Add";
-import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
-import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Avatar } from "@mui/material";
-import { NavLink, Outlet } from "react-router-dom";
-import Navbar from "../Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getSongsApi } from "../../api/songs/songsApi";
 import showToast from "../../utils/toastService";
 import { getRandomNumber } from "../Shared/shared";
 import { setSongs } from "../../redux/slices/songsSlice";
-import { current } from "@reduxjs/toolkit";
 
 export default function PlayerBar() {
   const theme = useTheme();
@@ -213,7 +185,7 @@ export default function PlayerBar() {
         </Box>
       </Box>
       <Box className={styles.center}>
-        <Box className={styles.audio_controls}>
+        {/* <Box className={styles.audio_controls}>
           <IconButton className={styles.mute} onClick={muteSong}>
             {muted ? (
               <VolumeOffIcon sx={{ color: `var(--white)` }} />
@@ -237,7 +209,7 @@ export default function PlayerBar() {
               <CachedIcon />
             )}
           </IconButton>
-        </Box>
+        </Box> */}
         <Box className={styles.progress_container}>
           <p>{new Date(currentTime * 1000).toISOString().substring(14, 19)}</p>
           <input
@@ -268,6 +240,31 @@ export default function PlayerBar() {
             onChange={handleVolumeChange}
             className={styles.volume}
           />
+        </Box>
+        <Box className={styles.audio_controls}>
+          <IconButton className={styles.mute} onClick={muteSong}>
+            {muted ? (
+              <VolumeOffIcon sx={{ color: `var(--white)` }} />
+            ) : (
+              <VolumeUpIcon />
+            )}
+          </IconButton>
+          <IconButton className={styles.prev} onClick={playPrevSong}>
+            <SkipPreviousIcon />
+          </IconButton>
+          <IconButton className={styles.play} onClick={togglePlay}>
+            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+          </IconButton>
+          <IconButton className={styles.next} onClick={playNextSong}>
+            <SkipNextIcon />
+          </IconButton>
+          <IconButton className={styles.repeatIcon} onClick={reapteSong}>
+            {repeat ? (
+              <RepeatOneIcon sx={{ color: `var(--white)` }} />
+            ) : (
+              <CachedIcon />
+            )}
+          </IconButton>
         </Box>
       </Box>
       {/* <Box className={styles.right}>

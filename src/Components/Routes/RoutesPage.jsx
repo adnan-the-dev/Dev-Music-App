@@ -24,7 +24,7 @@ function RoutesPage() {
         // padding: "6rem 0 0 26rem",
         backgroundColor: "#181818",
         color: "#ffffff",
-        minHeight: "calc(100vh - 6rem)",
+        // minHeight: "calc(100vh - 6rem)",
       }}
     >
       <Routes>

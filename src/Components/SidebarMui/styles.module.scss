@@ -33,12 +33,12 @@
 
 .center {
   display: flex;
-  flex: 1;
-  flex-direction: column;
+  // flex: 1;
+  // flex-direction: column;
   align-items: center;
   justify-content: center;
   .audio_controls {
-    margin-top: 1rem;
+    // margin-top: 1rem;
 
     .tool_tip {
       font-size: 1.2rem !important;
@@ -89,7 +89,7 @@
   .progress_container {
     display: flex;
     align-items: center;
-    margin: 1rem 0 1.5rem 0;
+    // margin: 1rem 0 1.5rem 0;
 
     p {
       color: var(--light-white);

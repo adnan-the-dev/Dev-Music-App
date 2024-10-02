@@ -1,13 +1,14 @@
 .playlist {
   width: 16rem;
   padding: 2rem;
-  height: 26rem;
+  height: 100%;
+  width: 100%;
   background-color: var(--mini-black);
   color: var(--white);
   border-radius: 1rem;
-  margin: 1rem;
+  // margin: 1rem;
   cursor: pointer;
-
+  border: 1px solid var(--light-gray);
   img {
     width: 16rem;
     height: 20rem;
